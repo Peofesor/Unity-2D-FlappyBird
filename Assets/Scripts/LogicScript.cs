@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -27,5 +27,10 @@ public class LogicScript : MonoBehaviour
     {
         gameOverScreen.SetActive(true);
         gameOverSound.Play();
+    }    
+    
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

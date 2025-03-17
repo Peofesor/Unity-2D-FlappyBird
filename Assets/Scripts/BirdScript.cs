@@ -5,13 +5,14 @@ public class BirdScript : MonoBehaviour
     public Rigidbody2D myRigidBody;
     public float flapStrength;
     public LogicScript logic;
-    public bool birdIsAlive = true;
+    public bool birdIsAlive;
     public int rotationSpeed = 10;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+        birdIsAlive = true;
     }
 
     // Update is called once per frame
