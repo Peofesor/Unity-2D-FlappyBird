@@ -32,7 +32,7 @@ public class HighScoreManager : MonoBehaviour
 
     IEnumerator GetHighscores()
     {
-        using (UnityWebRequest www = UnityWebRequest.Get("http://ec2-3-73-118-68.eu-central-1.compute.amazonaws.com/get_highscores.php"))
+        using (UnityWebRequest www = UnityWebRequest.Get("https://ec2-3-73-118-68.eu-central-1.compute.amazonaws.com/get_highscores.php"))
         {
             yield return www.SendWebRequest();
 

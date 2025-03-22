@@ -41,7 +41,7 @@ public class LogicScriptNameInput : MonoBehaviour
         if (!string.IsNullOrEmpty(m_name))
         {
             PlayerPrefs.SetString("PlayerName", m_name);
-            Debug.Log("Player Name: " + m_name);
+            Debug.Log("NameInputScript: Player Name: " + m_name);
         }
         else
         {

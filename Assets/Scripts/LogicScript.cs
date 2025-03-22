@@ -1,4 +1,4 @@
-    using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -37,14 +37,13 @@ public class LogicScript : MonoBehaviour
         // Send Name and Score to DB
         DBManager dbManager = DBManager.Instance;
         string playerName = PlayerPrefs.GetString("PlayerName");
-        Debug.Log("Name sent to DB: " + playerName);
         if (dbManager != null)
         {
-            Debug.Log("dbManager != null");
+            Debug.Log("LogicScript: Name sent to DB: " + playerName);
             dbManager.SendScoreToServer(playerName, playerScore);
         }
-    }    
-   
+    }
+
     public void QuitGame()
     {
         Application.Quit();
