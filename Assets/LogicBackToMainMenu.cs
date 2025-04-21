@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class LogicBackToMainMenu : MonoBehaviour
 {
-    public void ChangeSceneToMainMenu()
+    public void ChangeSceneToGameplay()
     {
         SceneManager.LoadScene(0);
     }

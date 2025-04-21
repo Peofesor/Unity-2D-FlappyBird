@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class LogicScript : MonoBehaviour
 {
@@ -10,6 +11,30 @@ public class LogicScript : MonoBehaviour
     public AudioSource scoreSound;
     public AudioSource gameOverSound;
     private DBManager dbManager;
+    public GameObject startMenu;
+    public GameObject nameInput;
+
+    public GameObject pipeSpawner;
+    public GameObject bird;
+    public GameObject ground;
+    void Start()
+    {
+        bird.SetActive(false);
+        pipeSpawner.SetActive(false);
+        startMenu.SetActive(true);
+        ground.SetActive(true); // Boden soll sichtbar sein, aber nicht bewegen
+        nameInput.SetActive(false);
+
+        // Deaktiviere die GroundMoveScript-Komponente, damit der Boden sich nicht bewegt
+        GroundScript groundMoveScript = ground.GetComponent<GroundScript>();
+        if (groundMoveScript != null)
+        {
+            groundMoveScript.enabled = false;
+        }
+
+        playerScore = 0;
+        scoreText.text = "0";
+    }
 
     [ContextMenu("Increase Score")]
     public void addScore(int scoreToAdd)
@@ -19,14 +44,10 @@ public class LogicScript : MonoBehaviour
         scoreSound.Play();
     }
 
-    public void ChangeSceneToMainMenu()
-    {
-        SceneManager.LoadScene(0);
-    }
-
     public void restartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+        StartGame(); // Wird nicht korrekt ausgeführt, bei Neustart des Spiels wird noch Menü angezeigt
     }
 
     public void gameOver()
@@ -44,8 +65,33 @@ public class LogicScript : MonoBehaviour
         }
     }
 
-    public void QuitGame()
+    public void ChangeSceneToHighscore()
     {
-        Application.Quit();
+        SceneManager.LoadScene(1);
+    }
+
+    public void DisplayNameInput()
+    {
+        nameInput.SetActive(true);
+        startMenu.SetActive(false);
+    }
+
+    public void StartGame()
+    {
+        startMenu.SetActive(false);
+        nameInput.SetActive(false);
+        bird.SetActive(true);
+        pipeSpawner.SetActive(true);
+
+        // Aktiviere die GroundMoveScript-Komponente, damit der Boden sich bewegt
+        GroundScript groundMoveScript = ground.GetComponent<GroundScript>();
+        if (groundMoveScript != null)
+        {
+            groundMoveScript.enabled = true;
+        }
+
+        // Spawne die erste Pipe sofort
+        PipeSpawnScript pipeSpawnScript = pipeSpawner.GetComponent<PipeSpawnScript>();
+        pipeSpawnScript.spawnPipe();
     }
 }
