@@ -3,6 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Xml.Linq;
 using UnityEngine.InputSystem;
+using System.Text;
 
 public class DBManager : MonoBehaviour
 {
@@ -35,28 +36,28 @@ public class DBManager : MonoBehaviour
             return;
         }
 
-        StartCoroutine(UploadScore(name, score));
+        StartCoroutine(PostScore(name, score));
     }
 
-    IEnumerator UploadScore(string name, int score)
+    IEnumerator PostScore(string name, int score)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("player_name", name);
-        form.AddField("score", score.ToString());
+        string json = JsonUtility.ToJson(new HighscoreData { name = name, score = score });
+        byte[] body = Encoding.UTF8.GetBytes(json);
 
-        using (UnityWebRequest www = UnityWebRequest.Post("http://ec2-3-73-118-68.eu-central-1.compute.amazonaws.com/save_score.php", form))
-        {
-            yield return www.SendWebRequest();
+        using UnityWebRequest request = new UnityWebRequest("https://venushighscores.azurewebsites.net/api/VenusHighscores", "POST");
+        request.uploadHandler = new UploadHandlerRaw(body);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
 
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                //Debug.Log("Score erfolgreich gesendet: " + www.downloadHandler.text);
-                Debug.Log("Name: " + name + ",Score: " + score);
-            }
-            else
-            {
-                Debug.LogError("Fehler beim Senden: " + www.error);
-            }
-        }
+        yield return request.SendWebRequest();
+
+        // Debug.Log($"POST Response: {request.downloadHandler.text}");
+    }
+
+    [System.Serializable]
+    class HighscoreData
+    {
+        public string name;
+        public int score;
     }
 }

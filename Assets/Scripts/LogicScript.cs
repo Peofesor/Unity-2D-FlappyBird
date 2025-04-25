@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 
 public class LogicScript : MonoBehaviour
 {
+    public InputField nameInputField; 
     public int playerScore;
     public Text scoreText;
     public GameObject gameOverScreen;
@@ -34,6 +35,13 @@ public class LogicScript : MonoBehaviour
 
         playerScore = 0;
         scoreText.text = "0";
+    }
+
+    public void SavePlayerName()
+    {
+        string enteredName = nameInputField.text;
+        PlayerPrefs.SetString("PlayerName", enteredName);
+        PlayerPrefs.Save();
     }
 
     [ContextMenu("Increase Score")]
@@ -78,6 +86,8 @@ public class LogicScript : MonoBehaviour
 
     public void StartGame()
     {
+        SavePlayerName(); // Speichere den Spielernamen aus dem Inputfeld
+
         startMenu.SetActive(false);
         nameInput.SetActive(false);
         bird.SetActive(true);
