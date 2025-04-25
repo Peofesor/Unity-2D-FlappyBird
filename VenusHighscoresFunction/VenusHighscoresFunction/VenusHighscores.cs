@@ -37,18 +37,21 @@ namespace HighscoreFunction
                     {
                         await connection.OpenAsync();
 
-                        string query = "SELECT TOP 10 name, score FROM scores ORDER BY score DESC";
+                        string query = "SELECT name, score, timestamp FROM scores ORDER BY score DESC, timestamp DESC";
                         using (SqlCommand command = new SqlCommand(query, connection))
                         {
                             using (SqlDataReader reader = await command.ExecuteReaderAsync())
                             {
-                                while (await reader.ReadAsync())
+                                int count = 0;
+                                while (await reader.ReadAsync() && count < 7) // limit to 7 entries for display
                                 {
                                     highscores.Add(new
                                     {
                                         name = reader["name"].ToString(),
-                                        score = (int)reader["score"]
+                                        score = (int)reader["score"],
+                                        timestamp = reader["timestamp"].ToString()
                                     });
+                                    count++;
                                 }
                             }
                         }
